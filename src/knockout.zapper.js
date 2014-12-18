@@ -61,7 +61,7 @@
 	function configureSettings(config) {
 		if (!config) config = {};
 		var settings = ko.utils.unwrapObservable(config);
-		settings.zapEffect = valOrDefault(settings.zapEffect, "")
+		settings.zapEffect = valOrDefault(settings.zapEffect, "");
 	}
 	function valOrDefault(val, defValue) {
 		return val || defValue;
