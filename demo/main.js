@@ -1,7 +1,7 @@
-define(["jquery", "knockout"],
+define(["jquery", "knockout", "../src/knockout.zapper"],
     function($, ko) {
         var viewModel = {
-            value: ko.observable()
+        	value: ko.observable()
         };
-        ko.applyBindings(viewModel, $('html')[0]);
+        ko.applyBindings(viewModel);
     });
