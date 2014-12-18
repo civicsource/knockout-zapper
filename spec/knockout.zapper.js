@@ -1,37 +1,79 @@
-define(['knockout','jquery',
-  "src/knockout.zapper"
-  ],
-  function(ko,$) {
+define(['knockout', 'jquery',"text!./template/with-both-templates.html",
+  "src/knockout.zapper",
+  "knockout.punches",
+  "template!./template/with-both-templates.html!knockout-zapper--with-both-templates",
+],
+  function(ko,$,withBothTemplates) {
+  	ko.punches.enableAll();
 
-    describe('Knockout Zapper', function() {
-      var viewModel;
-      var element;
-      var root;
+  	describe('Knockout Zapper', function() {
+  		var viewModel,
+  		element,
+  		root,
+  		model,
+		scenario;
 
-      describe('when binging to an element', function() {
-        beforeEach(function() {
+  		describe('when binding to an element', function() {
+  			beforeEach(function(){
+  				root = document.createElement('div');
+  				document.body.appendChild(root);
+  			});
+  			afterEach(function() {
+  				ko.cleanNode(root);
+  				$(root).remove();
+  			});
 
-          root = document.createElement('div');
-          root.innerHTML = '<input id="input" data-bind="zapper: obs">';
-          document.body.appendChild(root);
-          element = document.getElementById('input');
+  			describe('with both zapped and not-zapped templates',function(){
+  				beforeEach(function () {
+  					scenario = 'with-both-templates';
+  				});
+  				
+  				describe('and a starting status of not zapped',function(){
+  					beforeEach(function () {
+  						viewModel = {
+  							isZapped: ko.observable(false)
+  						};
+  						element = renderScenario(root,scenario,viewModel);
+  					});
 
-          viewModel = {
-            obs: ko.observable()
-          };
+  					it('should be bound', function() {
+  						expect(ko.dataFor(element)).toBe(viewModel);
+  					});
 
-          ko.applyBindings(viewModel, root);
-        });
+  					it('should show the not-zapped template', function() {
+  						expect($(element).find('[data-not-zapped]').first().is(":visible")).toBe(true);
+  					});
 
-        afterEach(function() {
-          ko.cleanNode(root);
-          $(root).remove();
-        });
+  					it('should not show the zapped template', function () {
+  						expect($(element).find('[data-zapped]').first().is(":visible")).toBe(false);
+  					});
 
-        it('should be bound', function() {
-          expect(ko.dataFor(element)).toBe(viewModel);
-        });
-      });
+  					describe('then zapping', function () {
+  						beforeEach(function () {
+  							viewModel.isZapped(true);
+  						});
 
-    });
+  						it('should not show the not-zapped template', function () {
+  							expect($(element).find('[data-not-zapped]').first().is(":visible")).toBe(false);
+  						});
+
+  						it('should show the zapped template', function () {
+  							expect($(element).find('[data-zapped]').first().is(":visible")).toBe(true);
+  						});
+  					});
+  				});
+  			});
+  			
+  		});
+
+  	});
+  	function renderScenario(rootElement,name,viewModel) {
+  		if (!viewModel) {
+  			viewModel = {};
+  		}
+  		viewModel.scenario = name;
+  		ko.renderTemplate("knockout-zapper--" + name, viewModel, null, rootElement, "replaceChildren");
+  		var element = document.getElementById('knockout-zapper__binding');
+  		return element;
+  	}
   });

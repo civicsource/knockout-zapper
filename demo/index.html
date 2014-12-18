@@ -7,13 +7,35 @@
 	<script src="../require-config.js"></script>
 	<script src="../bower_components/requirejs/require.js"></script>
 	<script type="text/javascript">
-		require(["main","bootstrap"]);
+		require(["main", "bootstrap"], function () {
+
+		});
 	</script>
-	
+	<style>
+		.top-buffer { margin-top:20px; }
+	</style>
+
 </head>
 <body>
-	<div>
-		<div class="well" data-bind="zapper: value"></div>
+	<div class="row top-buffer">
+		<div class="col-md-3 col-md-offset-3">
+			<ul class="list-group" data-bind="foreach: people">
+				<li class="list-group-item" data-bind="zapper: isZapped">
+					<div class="row" data-not-zapped>
+						<div class="col-md-12">
+							{{firstName}}
+							<a class="btn btn-danger pull-right" href="#" data-bind="click: zap">Zap</a>
+						</div>
+					</div>
+					<div class="row" data-zapped>
+						<div class="col-md-12 alert-warning">
+							{{firstName}} has been zapped
+							<a class="btn btn-primary pull-right" href="#" data-bind="click: unZap">Un-Zap</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
 	</div>
 </body>
 </html>

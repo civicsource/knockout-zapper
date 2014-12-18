@@ -1,7 +1,32 @@
-define(["jquery", "knockout", "../src/knockout.zapper"],
-    function($, ko) {
-        var viewModel = {
-        	value: ko.observable()
-        };
-        ko.applyBindings(viewModel);
+define(["jquery", "knockout", "lodash",
+	"knockout.punches",
+	"../src/knockout.zapper"],
+    function ($, ko, _) {
+    	ko.punches.enableAll();
+
+    	function Person(firstName) {
+    		this.firstName = firstName;
+    		this.isZapped = ko.observable(false);
+    	}
+
+    	Person.prototype.zap = function () {
+    		this.isZapped(true);
+    	};
+    	Person.prototype.unZap = function () {
+    		this.isZapped(false);
+    	};
+
+    	var names = [
+    		"Chad",
+			"DJ",
+			"Brian",
+			"Mark",
+			"Alex"
+    	];
+
+    	var viewModel = {
+    		people: _.map(names, function (name) { return new Person(name); })
+    	};
+
+    	ko.applyBindings(viewModel);
     });
