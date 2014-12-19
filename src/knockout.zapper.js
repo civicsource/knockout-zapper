@@ -47,6 +47,7 @@
 
 		},
 		update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+
 			var value = ko.utils.unwrapObservable(valueAccessor());
 
 			var settings = configureSettings(allBindingsAccessor.get('settings'));
@@ -62,31 +63,36 @@
 				$notZappedTemplate.show();
 				$zappedTemplate.hide();
 			} else {
+				if (!viewModel.hasDoneFirstUpdate) {
+					$notZappedTemplate.hide();
+					$zappedTemplate.show();
+				} else {
+					var $newElement = $element.clone().attr('id', $element.attr('id') + '__clone').attr('class', $element.attr('class'));
+					var parentTagName = $element.parent()[0].tagName.toLowerCase();
+					if (parentTagName == "ul" || $element.parent().hasClass("list-group")) {
+						var $newList = $("<" + parentTagName + "></" + parentTagName + ">").attr('class', $element.parent().attr('class'));
+						$newElement.appendTo($newList);
+						$newElement = $newList;
+					}
 
-				var $newElement = $element.clone().attr('id', $element.attr('id') + '__clone').attr('class', $element.attr('class'));
-				var parentTagName = $element.parent()[0].tagName.toLowerCase();
-				if (parentTagName == "ul" || $element.parent().hasClass("list-group")) {
-					var $newList = $("<" + parentTagName + "></" + parentTagName + ">").attr('class', $element.parent().attr('class'));
-					$newElement.appendTo($newList);
-					$newElement = $newList;
+					$newElement.css({
+						position: "absolute",
+						width: "100%",
+						height: "100%",
+						left: $element.position().left,
+						top: $element.position().top,
+						zIndex: 1000000
+					}).appendTo($element.parent());
+					$notZappedTemplate.hide();
+					$zappedTemplate.show();
+					$newElement.animate({
+						left: $(window).width()
+					}, config.animateDuration, function () {
+						$(this).remove();
+					});
 				}
-
-				$newElement.css({
-					position: "absolute",
-					width: "100%",
-					height: "100%",
-					left: $element.position().left,
-					top: $element.position().top,
-					zIndex: 1000000
-				}).appendTo($element.parent());
-				$notZappedTemplate.hide();
-				$zappedTemplate.show();
-				$newElement.animate({
-					left: $(window).width()
-				}, config.animateDuration, function () {
-					$(this).remove();
-				});
 			}
+			viewModel.hasDoneFirstUpdate = true;
 		}
 	};
 

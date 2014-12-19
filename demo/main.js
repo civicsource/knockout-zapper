@@ -6,7 +6,7 @@ define(["jquery", "knockout", "lodash",
 
     	function Person(firstName) {
     		this.firstName = firstName;
-    		this.isZapped = ko.observable(false);
+    		this.isZapped = ko.observable(firstName == "Brian" ? true : false);
     	}
 
     	Person.prototype.zap = function () {
@@ -23,9 +23,17 @@ define(["jquery", "knockout", "lodash",
 			"Mark",
 			"Alex"
     	];
+    	var names2 = [
+    		"Will",
+			"Brian",
+			"Tom",
+			"Clark",
+			"Anuj"
+    	];
 
     	var viewModel = {
-    		people: _.map(names, function (name) { return new Person(name); })
+    		people: _.map(names, function (name) { return new Person(name); }),
+    		people2: _.map(names2, function (name) { return new Person(name); })
     	};
 
     	ko.applyBindings(viewModel);
