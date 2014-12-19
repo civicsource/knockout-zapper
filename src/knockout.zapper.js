@@ -1,23 +1,19 @@
 (function (root, factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["knockout", "jquery", "lodash"], factory);
+		define(["knockout", "jquery"], factory);
 	} else {
 		// Browser globals
 		factory(ko, $, _, ZapperModel);
 	}
 }(this, function (ko, $, _, ZapperModel) {
 
-	var config = {
-		animateDuration: 1000
-	};
-
 	ko.bindingHandlers.zapper = {
 		init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 			var value = ko.utils.unwrapObservable(valueAccessor());
-			//element.model = new ZapperModel();
-			//element.model.instanceName = allBindingsAccessor.get('id') || _.uniqueId("zapper--");
-			//ko.renderTemplate("knockout-zapper-main", element.model, null, element, "replaceChildren");
+
+			//configire default settings
+			viewModel.settings = configureSettings(allBindingsAccessor.get("settings"));
 
 			var $element = $(element),
                 $zappedTemplate,
@@ -34,8 +30,10 @@
 				$zappedTemplate.show();
 			}
 
-			$("<style type='text/css'>.knockout-zapper__container {position: relative;overflow: hidden;width: 100%;height: 100%;}</style>").appendTo("head");
-			$("<style type='text/css'>.knockout-zapper__template {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}</style>").appendTo("head");
+			//if (!$("#knockout-zapper__container__style").first())
+			//$("<style id='knockout-zapper__container__style' type='text/css'>.knockout-zapper__container {position: relative;overflow: hidden;width: 100%;height: 100%;}</style>").appendTo("head");
+			//if (!$("#knockout-zapper__template__style").first())
+			//$("<style id='knockout-zapper__template__style' type='text/css'>.knockout-zapper__template {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}</style>").appendTo("head");
 
 			var $container = $("<div class='knockout-zapper__container'></div>");
 			$container.addClass("knockout-zapper__container");
@@ -50,10 +48,7 @@
 
 			var value = ko.utils.unwrapObservable(valueAccessor());
 
-			var settings = configureSettings(allBindingsAccessor.get('settings'));
-
 			var $element = $(element),
-				$activeElement,
                 $zappedTemplate,
                 $notZappedTemplate;
 
@@ -64,17 +59,14 @@
 			if (value === false) {
 				$notZappedTemplate.show();
 				$zappedTemplate.hide();
-				$activeElement = $notZappedTemplate;
-				fixHeight($activeElement, $container);
 			} else {
-				if (!viewModel.hasDoneFirstUpdate) {
-					$notZappedTemplate.hide();
-					$zappedTemplate.show();
-					$activeElement = $zappedTemplate;
-					fixHeight($activeElement, $container);
-				} else {
+				//if it hasnt done its first update, dont do the animate to handle the case where
+				//the valueaccessor is false from the start
+				if (viewModel.hasDoneFirstUpdate) {
+					//make a clone of the element and make it absolute and place right on top of the other.
 					var $newElement = $element.clone().attr('id', $element.attr('id') + '__clone').attr('class', $element.attr('class'));
 					var parentTagName = $element.parent()[0].tagName.toLowerCase();
+					//if this is a list, or list group div, make sure to wrap the clone so it keeps its styles
 					if (parentTagName == "ul" || $element.parent().hasClass("list-group")) {
 						var $newList = $("<" + parentTagName + "></" + parentTagName + ">").attr('class', $element.parent().attr('class'));
 						$newElement.appendTo($newList);
@@ -87,16 +79,17 @@
 						height: "100%",
 						left: $element.position().left,
 						top: $element.position().top,
-						zIndex: 1000000
+						zIndex: 1000000 //really big just in case
 					}).appendTo($element.parent());
+
+					//now hide the not zapped template and show the zapped one, which will appear right under the sliding away clone
 					$notZappedTemplate.hide();
 					$zappedTemplate.show();
-					$activeElement = $zappedTemplate;
-					fixHeight($activeElement, $container);
 
+					//animate the clone off screen to the right and then remove it
 					$newElement.animate({
 						left: $(window).width()
-					}, config.animateDuration, function () {
+					}, viewModel.settings.animateDuration, function () {
 						$(this).remove();
 					});
 				}
@@ -110,24 +103,12 @@
 	function configureSettings(config) {
 		if (!config) config = {};
 		var settings = ko.utils.unwrapObservable(config);
-		settings.zapEffect = valOrDefault(settings.zapEffect, "");
+		settings.animateDuration = valOrDefault(settings.animateDuration, 1000);
+		return settings;
 	}
 
 	function valOrDefault(val, defValue) {
 		return val || defValue;
 	}
-
-	function fixHeight($element, $elementToFill) {
-		setTimeout(function () {
-			var $child =  $element.children().first();
-			var $elementToUse = $child || $element;
-			var height = $element.children().first().outerHeight();
-			$elementToFill.height(height);
-		}, 100);
-	}
-
-	return {
-		config: config
-	};
 
 }));

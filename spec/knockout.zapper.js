@@ -1,11 +1,11 @@
-define(['knockout', 'jquery',"text!./template/with-both-templates.html","src/knockout.zapper",
+define(['knockout', 'jquery', "text!./template/with-both-templates.html", "src/knockout.zapper",
   "knockout.punches",
   "template!./template/with-both-templates.html!knockout-zapper--with-both-templates",
 ],
-  function(ko,$,withBothTemplates, zapper) {
+  function (ko, $) {
   	ko.punches.enableAll();
 
-  	describe('Knockout Zapper', function() {
+  	describe('Knockout Zapper', function () {
   		var viewModel,
   		element,
   		root,
@@ -21,34 +21,34 @@ define(['knockout', 'jquery',"text!./template/with-both-templates.html","src/kno
   			return $("html").find('#knockout-zapper__binding__clone').first().is(":visible");
   		}
 
-  		describe('when binding to an element', function() {
-  			beforeEach(function(){
+  		describe('when binding to an element', function () {
+  			beforeEach(function () {
   				root = document.createElement('div');
   				document.body.appendChild(root);
   			});
-  			afterEach(function() {
+  			afterEach(function () {
   				ko.cleanNode(root);
   				$(root).remove();
   			});
 
-  			describe('with both zapped and not-zapped templates',function(){
+  			describe('with both zapped and not-zapped templates', function () {
   				beforeEach(function () {
   					scenario = 'with-both-templates';
   				});
-  				
-  				describe('and a starting status of not zapped',function(){
+
+  				describe('and a starting status of not zapped', function () {
   					beforeEach(function () {
   						viewModel = {
   							isZapped: ko.observable(false)
   						};
-  						element = renderScenario(root,scenario,viewModel);
+  						element = renderScenario(root, scenario, viewModel);
   					});
 
-  					it('should be bound', function() {
+  					it('should be bound', function () {
   						expect(ko.dataFor(element)).toBe(viewModel);
   					});
 
-  					it('should show the not-zapped template', function() {
+  					it('should show the not-zapped template', function () {
   						expect(notZappedIsVisible()).toBe(true);
   					});
 
@@ -77,7 +77,7 @@ define(['knockout', 'jquery',"text!./template/with-both-templates.html","src/kno
   							beforeEach(function (done) {
   								setTimeout(function () {
   									done();
-  								}, zapper.config.animateDuration + 200);
+  								}, 10); //set to 5 but give it an extra few millis
   							});
 
   							it('should not show the cloned element', function (done) {
@@ -88,11 +88,11 @@ define(['knockout', 'jquery',"text!./template/with-both-templates.html","src/kno
   					});
   				});
   			});
-  			
+
   		});
 
   	});
-  	function renderScenario(rootElement,name,viewModel) {
+  	function renderScenario(rootElement, name, viewModel) {
   		if (!viewModel) {
   			viewModel = {};
   		}
