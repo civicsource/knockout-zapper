@@ -83,14 +83,18 @@
 					}).appendTo($element.parent());
 
 					//now hide the not zapped template and show the zapped one, which will appear right under the sliding away clone
+					//keep the height of the original element until the clone slides off
+					var height = $notZappedTemplate.outerHeight();
 					$notZappedTemplate.hide();
 					$zappedTemplate.show();
+					$zappedTemplate.height(height);
 
 					//animate the clone off screen to the right and then remove it
 					$newElement.animate({
 						left: $(window).width()
 					}, viewModel.settings.animateDuration, function () {
 						$(this).remove();
+						$zappedTemplate.height(getHeight($zappedTemplate));
 					});
 				}
 			}
@@ -99,6 +103,12 @@
 	};
 
 	ko.virtualElements.allowedBindings.zapper = true;
+
+	function getHeight($element) {
+		var $child = $element.children().first();
+		var height = $child ? $child.outerHeight() : $element.outerHeight();
+		return height;
+	}
 
 	function configureSettings(config) {
 		if (!config) config = {};
