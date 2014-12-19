@@ -1,0 +1,70 @@
+﻿<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>knockout zapper</title>
+
+	<script src="./require-config.js"></script>
+	<script src="../bower_components/requirejs/require.js"></script>
+	<script type="text/javascript">
+		require(["main", "bootstrap"], function () {
+
+		});
+	</script>
+	<style>
+		.top-buffer {
+			margin-top: 20px;
+		}
+	</style>
+
+</head>
+<body>
+	<div class="row top-buffer">
+		<div class="col-md-3 col-md-offset-3">
+			<h3>Using Lists</h3>
+			<ul class="list-group" data-bind="foreach: people">
+
+				<li class="list-group-item" data-bind="zapper: isZapped">
+					<div class="row" data-not-zapped>
+						<div class="col-md-12">
+							{{firstName}}
+							<a class="btn btn-danger pull-right" href="#" data-bind="click: zap">Zap</a>
+						</div>
+					</div>
+					<div class="row" data-zapped>
+						<div class="col-md-12 alert-warning">
+							{{firstName}} has been zapped
+							<a class="btn btn-primary pull-right" href="#" data-bind="click: unZap">Un-Zap</a>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+	
+	<div class="row top-buffer">
+		<div class="col-md-3 col-md-offset-3">
+			<h3>Using Divs</h3>
+			<div class="list-group" data-bind="foreach: people2">
+				<div class="list-group-item" data-bind="zapper: isZapped">
+						<div class="row" data-not-zapped>
+							<div class="col-md-12">
+								{{firstName}}
+								<a class="btn btn-danger pull-right" href="#" data-bind="click: zap">Zap</a>
+							</div>
+						</div>
+						<div class="row" data-zapped>
+							<div class="col-md-12 alert-warning">
+								{{firstName}} has been zapped
+								<a class="btn btn-primary pull-right" href="#" data-bind="click: unZap">Un-Zap</a>
+							</div>
+						</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
