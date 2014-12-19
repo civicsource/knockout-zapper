@@ -34,7 +34,7 @@
 				$zappedTemplate.show();
 			}
 
-			$("<style type='text/css'>.knockout-zapper__container {position: relative;overflow: hidden;width: 100%;height: 35px;}</style>").appendTo("head");
+			$("<style type='text/css'>.knockout-zapper__container {position: relative;overflow: hidden;width: 100%;height: 100%;}</style>").appendTo("head");
 			$("<style type='text/css'>.knockout-zapper__template {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}</style>").appendTo("head");
 
 			var $container = $("<div class='knockout-zapper__container'></div>");
@@ -53,19 +53,25 @@
 			var settings = configureSettings(allBindingsAccessor.get('settings'));
 
 			var $element = $(element),
+				$activeElement,
                 $zappedTemplate,
                 $notZappedTemplate;
 
 			$notZappedTemplate = $element.find("div[data-not-zapped]").first();
 			$zappedTemplate = $element.find("div[data-zapped]").first();
+			$container = $notZappedTemplate.parent(".knockout-zapper__container");
 
 			if (value === false) {
 				$notZappedTemplate.show();
 				$zappedTemplate.hide();
+				$activeElement = $notZappedTemplate;
+				fixHeight($activeElement, $container);
 			} else {
 				if (!viewModel.hasDoneFirstUpdate) {
 					$notZappedTemplate.hide();
 					$zappedTemplate.show();
+					$activeElement = $zappedTemplate;
+					fixHeight($activeElement, $container);
 				} else {
 					var $newElement = $element.clone().attr('id', $element.attr('id') + '__clone').attr('class', $element.attr('class'));
 					var parentTagName = $element.parent()[0].tagName.toLowerCase();
@@ -85,6 +91,9 @@
 					}).appendTo($element.parent());
 					$notZappedTemplate.hide();
 					$zappedTemplate.show();
+					$activeElement = $zappedTemplate;
+					fixHeight($activeElement, $container);
+
 					$newElement.animate({
 						left: $(window).width()
 					}, config.animateDuration, function () {
@@ -106,6 +115,15 @@
 
 	function valOrDefault(val, defValue) {
 		return val || defValue;
+	}
+
+	function fixHeight($element, $elementToFill) {
+		setTimeout(function () {
+			var $child =  $element.children().first();
+			var $elementToUse = $child || $element;
+			var height = $element.children().first().outerHeight();
+			$elementToFill.height(height);
+		}, 100);
 	}
 
 	return {
