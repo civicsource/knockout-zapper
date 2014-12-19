@@ -3,6 +3,8 @@
 
 knockout (bootstrap) binding to show and hide templates in an animated fashion whereby the original template is swiped right off the screen.
 
+view the [demo]("http://civicsource.github.io/knockout-zapper/")
+
 ## Usage
 
 HTML
