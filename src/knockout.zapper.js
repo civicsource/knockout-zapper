@@ -8,6 +8,10 @@
     }
 }(this, function(ko, $, _, ZapperModel) {
 
+	var config = {
+		animateDuration: 1000
+	}
+
     ko.bindingHandlers.zapper = {
         init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var value = ko.utils.unwrapObservable(valueAccessor());
@@ -50,7 +54,7 @@
 
                 //todo: check if this is a list etc.. if we are going to support other types of scenarios
                 $newList = $("<ul></ul>").attr('class', $element.parent().attr('class'));
-                var clone = $element.clone().appendTo($newList);
+                var clone = $element.clone().attr('id',$element.attr('id') + '__clone').appendTo($newList);
 
                 $newList.css({
                     position: "absolute",
@@ -60,10 +64,11 @@
                     top: $element.position().top,
                     zIndex: 1000000
                 }).appendTo($element.parent());
+                $notZappedTemplate.hide();
                 $zappedTemplate.show();
                 $newList.animate({
                     left: $(window).width()
-                }, 1000, function() {
+                }, config.animateDuration, function() {
                     $(this).remove();
                 });
             }
@@ -80,6 +85,10 @@
 
     function valOrDefault(val, defValue) {
         return val || defValue;
+    }
+
+    return {
+		config: config
     }
 
 }));

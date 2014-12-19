@@ -1,9 +1,8 @@
-define(['knockout', 'jquery',"text!./template/with-both-templates.html",
-  "src/knockout.zapper",
+define(['knockout', 'jquery',"text!./template/with-both-templates.html","src/knockout.zapper",
   "knockout.punches",
   "template!./template/with-both-templates.html!knockout-zapper--with-both-templates",
 ],
-  function(ko,$,withBothTemplates) {
+  function(ko,$,withBothTemplates, zapper) {
   	ko.punches.enableAll();
 
   	describe('Knockout Zapper', function() {
@@ -12,6 +11,15 @@ define(['knockout', 'jquery',"text!./template/with-both-templates.html",
   		root,
   		model,
 		scenario;
+  		function notZappedIsVisible() {
+  			return $(element).find('[data-not-zapped]').first().is(":visible");
+  		}
+  		function zappedIsVisible() {
+  			return $(element).find('[data-zapped]').first().is(":visible");
+  		}
+  		function clonedElementIsVisible() {
+  			return $("html").find('#knockout-zapper__binding__clone').first().is(":visible");
+  		}
 
   		describe('when binding to an element', function() {
   			beforeEach(function(){
@@ -41,11 +49,11 @@ define(['knockout', 'jquery',"text!./template/with-both-templates.html",
   					});
 
   					it('should show the not-zapped template', function() {
-  						expect($(element).find('[data-not-zapped]').first().is(":visible")).toBe(true);
+  						expect(notZappedIsVisible()).toBe(true);
   					});
 
   					it('should not show the zapped template', function () {
-  						expect($(element).find('[data-zapped]').first().is(":visible")).toBe(false);
+  						expect(zappedIsVisible()).toBe(false);
   					});
 
   					describe('then zapping', function () {
@@ -54,11 +62,28 @@ define(['knockout', 'jquery',"text!./template/with-both-templates.html",
   						});
 
   						it('should not show the not-zapped template', function () {
-  							expect($(element).find('[data-not-zapped]').first().is(":visible")).toBe(false);
+  							expect(notZappedIsVisible()).toBe(false);
   						});
 
   						it('should show the zapped template', function () {
-  							expect($(element).find('[data-zapped]').first().is(":visible")).toBe(true);
+  							expect(zappedIsVisible()).toBe(true);
+  						});
+
+  						it('should show the cloned element animating', function () {
+  							expect(clonedElementIsVisible()).toBe(true);
+  						});
+
+  						describe('after the duration', function () {
+  							beforeEach(function (done) {
+  								setTimeout(function () {
+  									done();
+  								}, zapper.config.animateDuration + 200);
+  							});
+
+  							it('should not show the cloned element', function (done) {
+  								expect(clonedElementIsVisible()).toBe(false);
+  								done();
+  							});
   						});
   					});
   				});
