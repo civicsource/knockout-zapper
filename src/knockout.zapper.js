@@ -78,8 +78,7 @@
 						width: "100%",
 						height: "100%",
 						left: $element.position().left,
-						top: $element.position().top,
-						zIndex: 1000000 //really big just in case
+						top: $element.position().top
 					}).appendTo($element.parent());
 
 					//now hide the not zapped template and show the zapped one, which will appear right under the sliding away clone
