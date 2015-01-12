@@ -90,7 +90,8 @@
 
 					//animate the clone off screen to the right and then remove it
 					$newElement.animate({
-						left: $(window).width()
+						left: $(window).width() / 2,
+						opacity: 0
 					}, viewModel.settings.animateDuration, function () {
 						$(this).remove();
 						$zappedTemplate.height(getHeight($zappedTemplate));
