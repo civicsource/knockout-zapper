@@ -1,7 +1,7 @@
 {
   "name": "knockout-zapper",
   "main": "src/knockout.zapper.js",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "ignore": [
     "node_modules",
     "spec",
@@ -9,7 +9,7 @@
     "package.json"
   ],
   "dependencies": {
-    "knockout.js": ">=2.1.0",
+    "knockout": ">=3.1.0",
     "jquery": "~2.1.1",
     "require-css": "~0.1.8",
     "knockout-require-templates": "~1.0.1",
