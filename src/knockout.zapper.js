@@ -2,7 +2,7 @@ var ko = require("knockout");
 var $ = require("jquery");
 
 ko.bindingHandlers.zapper = {
-	init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
 
 			//configire default settings

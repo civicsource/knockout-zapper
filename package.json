@@ -2,9 +2,16 @@
   "name": "knockout.zapper",
   "version": "2.0.0",
   "private": true,
+  "dependencies": {
+    "jquery": ">=1.10"
+  },
+  "peerDependencies": {
+    "knockout": "3.x"
+  },
   "devDependencies": {
     "babel-eslint": "6.x",
     "bower": "*",
+    "chai": "3.x",
     "cloneextend": "0.0.3",
     "connect-nocache": "^1.1.0",
     "eslint": "2.x",
@@ -18,12 +25,17 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-watch": "*",
     "grunt-template-jasmine-requirejs": "^0.2.0",
+    "jsdom": "^9.3.0",
+    "jsdom-global": "^2.0.0",
+    "knockout-punches": "^0.5.1",
+    "knockout-template-loader": "^1.0.1",
     "load-grunt-tasks": "*"
   },
   "description": "Have a template that is bothering you? Just zap it!",
   "main": "src/knockout.zapper.js",
   "scripts": {
-    "lint": "eslint . --format=unix"
+    "lint": "eslint . --format=unix",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
