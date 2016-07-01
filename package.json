@@ -1,11 +1,14 @@
 {
-  "name": "knockout-zapper",
-  "version": "0.1.0",
+  "name": "knockout.zapper",
+  "version": "2.0.0",
   "private": true,
   "devDependencies": {
+    "babel-eslint": "6.x",
     "bower": "*",
     "cloneextend": "0.0.3",
     "connect-nocache": "^1.1.0",
+    "eslint": "2.x",
+    "eslint-plugin-filenames": "1.x",
     "grunt": "*",
     "grunt-bower": "*",
     "grunt-bower-requirejs": "*",
@@ -16,5 +19,20 @@
     "grunt-contrib-watch": "*",
     "grunt-template-jasmine-requirejs": "^0.2.0",
     "load-grunt-tasks": "*"
-  }
+  },
+  "description": "Have a template that is bothering you? Just zap it!",
+  "main": "src/knockout.zapper.js",
+  "scripts": {
+    "lint": "eslint . --format=unix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/civicsource/knockout.zapper.git"
+  },
+  "author": "CivicSource",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/civicsource/knockout.zapper/issues"
+  },
+  "homepage": "https://github.com/civicsource/knockout.zapper#readme"
 }
